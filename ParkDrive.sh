@@ -17,6 +17,8 @@ HelpFunc(){
    echo "d     preselect drive (ie sda sdb sde etc)"
    echo "f     Fast Skips Countdown"
    echo "Y     Skips Confirmation Dialogue. Use at your own risk"
+   echo "s     Suspend Drive (default action)"
+   echo "r     Remove (Sleep) Drive (lower power state but can cause porblems for some raid controllers, or make drives vanish)" 
    echo
    exit 0
 }
@@ -38,7 +40,7 @@ Park(){
 		sleep 1
 	done
 
-	hdparm -y /dev/${1}
+	hdparm -$Mode /dev/${1}
 	if [ $? -ne 0 ]; then
 		echo "ERROR: Can Not Put Drive in Standby"
 		exit 2
@@ -51,6 +53,7 @@ Help=0
 Drive=NULL
 Fast=0
 Confirmation=0
+Mode="y"
 
 #Options
 while [[ "$#" -gt 0 ]]; do
@@ -59,6 +62,8 @@ while [[ "$#" -gt 0 ]]; do
         -d|--Drive) Drive="$2"; shift ;;
         -f|--fast) Fast=1 ;;
         -Y|--NoWarnings) Confirmation=1 ;;        
+        -s|--NoWarnings) Mode="y" ;;
+        -r|--NoWarnings) Mode="Y" ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
