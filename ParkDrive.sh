@@ -14,11 +14,11 @@ HelpFunc(){
    echo "Syntax: ParkDrive [-o] [-d] [Drive]"
    echo "options:"
    echo "h     Display this help"
-   echo "d     preselect drive (ie sda sdb sde etc)"
+   echo "d     Preselect drive (ie sda sdb sde etc)"
    echo "f     Fast Skips Countdown"
    echo "Y     Skips Confirmation Dialogue. Use at your own risk"
    echo "s     Suspend Drive (default action)"
-   echo "r     Remove (Sleep) Drive (lower power state but can cause porblems for some raid controllers, or make drives vanish)" 
+   echo "r     Remove (Sleep) Drive (lower power state but can cause problems for some raid controllers, or make drives vanish)" 
    echo
    exit 0
 }
