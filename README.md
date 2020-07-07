@@ -12,3 +12,5 @@ h     Display this help
 d     preselect drive (ie sda sdb sde etc)
 f     Fast Skips Countdown
 Y     Skips Confirmation Dialogue. Use at your own risk
+s     Suspend Drive (lower power state but can cause porblems for some raid controllers, or make drives vanish)
+r     Remove (Sleep) Drive (default action)
