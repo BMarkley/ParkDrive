@@ -28,7 +28,18 @@ Park(){
 	#input Drive Designation (ie sdd)
 	umount /dev/${1}? 
 	if [ $? -ne 0 ]; then
-		echo "${1} was not mounted"
+		for File in /dev/${1}?
+		do
+		findmnt ${File}
+			if [ $? -ne 0 ]; then
+				echo "${File} is not mounted"
+			else
+				echo
+				echo "ERROR: ${File} is still mounted!!"
+				echo
+				exit 11
+			fi
+		done
 	else
 		echo "${1} unmounted" 
 	fi
@@ -42,8 +53,10 @@ Park(){
 
 	hdparm -$Mode /dev/${1}
 	if [ $? -ne 0 ]; then
+		echo
 		echo "ERROR: Can Not Put Drive in Standby"
-		exit 2
+		echo
+		exit 12
 	fi
 	return 0
 }
@@ -78,7 +91,7 @@ fi
 #Main
 if [ "$(id -u)" -ne 0 ]; then
     echo "ERROR: Run as Root"
-    exit 3
+    exit 2
 fi
 
 if [ $Drive == NULL ]; then
@@ -90,7 +103,7 @@ fi
 test -e /dev/${Drive}
 if [ $? -ne 0 ]; then
 	echo "ERROR: Drive does Not Exist"
-	exit 4
+	exit 3
 fi
 
 if [ $Confirmation != 1 ]; then 
