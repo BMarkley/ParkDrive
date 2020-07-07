@@ -30,6 +30,14 @@ Park(){
 	else
 		echo "${1} unmounted" 
 	fi
+	
+	echo "wait three seconds"
+	for Index in {3..1}
+		do
+		echo "Parking drive in ${Index}"
+		sleep 1
+	done
+
 	hdparm -y /dev/${1}
 	if [ $? -ne 0 ]; then
 		echo "ERROR: Can Not Put Drive in Standby"
@@ -98,6 +106,7 @@ if [ $Fast != 1 ]; then
 	sleep 1
 	done
 	echo "unmounting drive"
+	echo
 fi
 
 Park ${Drive}
