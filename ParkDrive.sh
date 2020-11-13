@@ -3,6 +3,10 @@
 #This script unmounts all partitions, and parks the heads on a drive for hotswapping
 #Input the designation of the Drive you want to Park
 
+#Revisions
+#2020/11/12 Script can now power down USB harddrives.
+
+
 #Functions
 HelpFunc(){
    # Display Help
@@ -41,22 +45,34 @@ Park(){
 			fi
 		done
 	else
-		echo "${1} unmounted" 
+		echo "${1} unmounted"
 	fi
-	
+
 	echo "wait three seconds"
 	for Index in {3..1}
 		do
 		echo "Parking drive in ${Index}"
 		sleep 1
 	done
+    find /dev/disk/by-id/ -lname "*${1}" | grep "usb" > /dev/null
 
-	hdparm -$Mode /dev/${1}
-	if [ $? -ne 0 ]; then
-		echo
-		echo "ERROR: Can Not Put Drive in Standby"
-		echo
-		exit 12
+    if [ $? -ne 0 ]; then
+		hdparm -$Mode /dev/${1}
+		if [ $? -ne 0 ]; then
+			echo
+			echo "ERROR: Can Not Put Drive in Standby"
+			echo
+			exit 12
+		fi
+	else
+		udisksctl power-off -b  /dev/${1}
+		if [ $? -ne 0 ]; then
+			echo
+			echo "ERROR: Can Not Put Drive in Standby"
+			echo
+			exit 13
+		fi
+		
 	fi
 	return 0
 }
@@ -74,7 +90,7 @@ while [[ "$#" -gt 0 ]]; do
 		-h|--help) Help=1 ;;
         -d|--Drive) Drive="$2"; shift ;;
         -f|--fast) Fast=1 ;;
-        -Y|--NoWarnings) Confirmation=1 ;;        
+        -Y|--NoWarnings) Confirmation=1 ;;
         -s|--NoWarnings) Mode="y" ;;
         -r|--NoWarnings) Mode="Y" ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
@@ -86,7 +102,7 @@ done
 if [ $Help == 1 ]; then
 	HelpFunc
 	exit 0
-fi 
+fi
 
 #Main
 if [ "$(id -u)" -ne 0 ]; then
@@ -99,14 +115,14 @@ if [ $Drive == NULL ]; then
 	echo "Which drive would you like to remove? (ie sda sdb sdc etc)"
 	read Drive
 fi
-		
+
 test -e /dev/${Drive}
 if [ $? -ne 0 ]; then
 	echo "ERROR: Drive does Not Exist"
 	exit 3
 fi
 
-if [ $Confirmation != 1 ]; then 
+if [ $Confirmation != 1 ]; then
 	echo
 	echo "Are you sure you want to unmount /dev/${Drive}?"
 	echo "Unmounting system drives could cause system instability. y/N"
@@ -117,7 +133,7 @@ if [ $Confirmation != 1 ]; then
 		fi
 fi
 
-if [ $Fast != 1 ]; then 
+if [ $Fast != 1 ]; then
 	for Index in {5..1}
 	do
 	echo "unmounting drive in ${Index}"
