@@ -111,7 +111,7 @@ if [ "$(id -u)" -ne 0 ]; then
 fi
 
 if [ $Drive == NULL ]; then
-	printf "$(sudo lsblk /dev/sd?)\n"
+	printf "$(lsblk /dev/sd?)\n"
 	echo "Which drive would you like to remove? (ie sda sdb sdc etc)"
 	read Drive
 fi
