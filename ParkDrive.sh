@@ -5,6 +5,7 @@
 
 #Revisions
 #2020/11/12 Script can now power down USB harddrives.
+#2020/11/27 Removed Sudo from inside script. Sudo should be called outside script.  
 
 
 #Functions
