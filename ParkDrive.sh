@@ -5,7 +5,8 @@
 
 #Revisions
 #2020/11/12 Script can now power down USB harddrives.
-#2020/11/27 Removed Sudo from inside script. Sudo should be called outside script.  
+#2020/11/27 Removed Sudo from inside script. Sudo should be called outside script. 
+#2022/11/08 fised error where sdd won't unmount as it sips to sdd1 sdd2 etc
 
 
 #Functions
@@ -31,7 +32,7 @@ HelpFunc(){
 Park(){
 	#Unmounts all Partitions on a drive and puts the Drive into standby
 	#input Drive Designation (ie sdd)
-	umount /dev/${1}? 
+	umount /dev/${1}* 
 	if [ $? -ne 0 ]; then
 		for File in /dev/${1}?
 		do
