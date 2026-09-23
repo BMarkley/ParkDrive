@@ -5,7 +5,8 @@
 
 #Revisions
 #2020/11/12 Script can now power down USB harddrives.
-#2020/11/27 Removed Sudo from inside script. Sudo should be called outside script.  
+#2020/11/27 Removed Sudo from inside script. Sudo should be called outside script.
+#2026/09/23 Fixed bug so it will work with /dev/sda as well as /dev/sda1 devices  
 
 
 #Functions
